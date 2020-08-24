@@ -2,7 +2,7 @@ package main
 
 import (
 	wor "github.com/HughNian/nmid/worker"
-	npw "gitee.com/HughNian/npartword"
+	npw "github.com/HughNian/npartword"
 	"github.com/vmihailenco/msgpack"
 	"fmt"
 	"log"
