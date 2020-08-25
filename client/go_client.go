@@ -1,4 +1,4 @@
-package client
+package main
 
 import (
 	"github.com/vmihailenco/msgpack"
