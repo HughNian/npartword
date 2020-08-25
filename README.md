@@ -11,4 +11,40 @@ npw：npartword，golang实现中文分词系统，主体分词逻辑有两个�
 
 - 2.分词系统服务调用，只要通过nmid的client调用即可，任何nmid的client都可以随时跨服务器的使用分词系统。    
 
+```json
+php调用返回
 
+//普通分词
+fname - PartWordsM1
+array(3) {
+  [0]=>
+  int(0)
+  [1]=>
+  string(2) "ok"
+  [2]=>
+  string(77) "南京大学|城|书店|，|长春市|长春|药店|，|研究|生命|起源|"
+}
+
+//mmseg分词
+fname - PartWordsM2
+array(3) {
+  [0]=>
+  int(0)
+  [1]=>
+  string(2) "ok"
+  [2]=>
+  string(77) "南京|大学城|书店|，|长春市|长春|药店|，|研究|生命|起源|"
+}
+
+//隐马尔可夫模型
+fname - PartWordsM3
+array(3) {
+  [0]=>
+  int(0)
+  [1]=>
+  string(2) "ok"
+  [2]=>
+  string(75) "南京大学|城书店|，|长春市|长春药店|，|研究|生命|起源|"
+}
+
+```
