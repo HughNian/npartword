@@ -206,6 +206,13 @@ func (pr *Parter) PartWordsShowPos(text string, partModel int) string {
 	return PartToStrings(words, true)
 }
 
+//分词返回字符串数组
+func (pr *Parter) PartWordsTexts(text string, partModel int) []string {
+	words := pr.DoPartWords(text, partModel)
+
+	return PartToTexts(words)
+}
+
 type Text []byte
 func splitToChars(text []byte) []Text {
 	current := 0

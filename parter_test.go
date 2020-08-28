@@ -15,4 +15,7 @@ func Test_Dict(t *testing.T) {
 
 	str := parter.PartWords(text, PART_MODE_TWO)
 	fmt.Println(str)
+
+	texts := parter.PartWordsTexts(text, PART_MODE_TWO)
+	fmt.Println(texts)
 }

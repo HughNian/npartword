@@ -73,3 +73,32 @@ func PartToStrings(part []*Part, posShow bool) (output string) {
 
 	return output
 }
+
+func PartToTexts(part []*Part) (output []string) {
+	if len(part) <= 0 {
+		return nil
+	}
+
+	output = make([]string, 0)
+	xchars := make([]byte, 0)
+	for i := range part {
+		for _, w := range part[i].Word() {
+			if w.pos == "x" && w.chars[0] != SPACE {
+				xchars = append(xchars, w.chars...)
+			} else {
+				if len(xchars) > 0 {
+					output = append(output, string(xchars))
+					xchars = make([]byte, 0)
+				}
+
+				output = append(output, string(w.chars))
+			}
+		}
+	}
+	if len(xchars) > 0 {
+		output = append(output, string(xchars))
+		xchars = make([]byte, 0)
+	}
+
+	return output
+}
