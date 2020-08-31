@@ -34,7 +34,11 @@ func FilterPartNil(part []*Part) []*Part {
 	return newPart
 }
 
-func PartToStrings(part []*Part, posShow bool) (output string) {
+//字符串显示分词
+//tag 0 不显示词其他信息
+//tag 1 显示词的词性
+//tag 2 显示词的词频，distance
+func PartToStrings(part []*Part, tag int) (output string) {
 	if len(part) <= 0 {
 		return ``
 	}
@@ -46,16 +50,20 @@ func PartToStrings(part []*Part, posShow bool) (output string) {
 				xchars = append(xchars, w.chars...)
 			} else {
 				if len(xchars) > 0 {
-					if posShow {
-						output += fmt.Sprintf("%s/%s ", string(xchars), "x")
+					if tag & 1 == 1 {
+						output += fmt.Sprintf("%s/%s| ", string(xchars), "x")
+					} else if tag & 2 == 2 {
+						output += fmt.Sprintf("%s/%f| ", string(xchars), 0.)
 					} else {
 						output += fmt.Sprintf("%s|", string(xchars))
 					}
 					xchars = make([]byte, 0)
 				}
 
-				if posShow {
-					output += fmt.Sprintf("%s/%s ", string(w.chars), w.pos)
+				if tag & 1 == 1 {
+					output += fmt.Sprintf("%s/%s| ", string(w.chars), w.pos)
+				} else if tag & 2 == 2 {
+					output += fmt.Sprintf("%s%f|", string(w.chars), w.distance)
 				} else {
 					output += fmt.Sprintf("%s|", string(w.chars))
 				}
@@ -63,8 +71,10 @@ func PartToStrings(part []*Part, posShow bool) (output string) {
 		}
 	}
 	if len(xchars) > 0 {
-		if posShow {
-			output += fmt.Sprintf("%s/%s ", string(xchars), "x")
+		if tag & 1 == 1 {
+			output += fmt.Sprintf("%s/%s| ", string(xchars), "x")
+		} else if tag & 2 == 2 {
+			output += fmt.Sprintf("%s/%f| ", string(xchars), 0.)
 		} else {
 			output += fmt.Sprintf("%s|", string(xchars))
 		}

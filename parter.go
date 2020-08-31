@@ -193,17 +193,10 @@ func (pr *Parter) DoPartWords(text string, partModel int) []*Part {
 }
 
 //分词
-func (pr *Parter) PartWords(text string, partModel int) string {
+func (pr *Parter) PartWords(text string, partModel int, tag int) string {
 	words := pr.DoPartWords(text, partModel)
 
-	return PartToStrings(words, false)
-}
-
-//分词显示词性
-func (pr *Parter) PartWordsShowPos(text string, partModel int) string {
-	words := pr.DoPartWords(text, partModel)
-
-	return PartToStrings(words, true)
+	return PartToStrings(words, tag)
 }
 
 //分词返回字符串数组
