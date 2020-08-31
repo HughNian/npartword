@@ -56,7 +56,7 @@ func main() {
 		}
 	}
 
-	text := []string{"南京大学城书店，长春市长春药店，研究生命起源"}
+	text := []string{"南京大学城书店，长春市长春药店，研究生命起源", "2"}
 	params, err := msgpack.Marshal(&text)
 	if err != nil {
 		log.Fatalln("params msgpack error:", err)

@@ -6,6 +6,7 @@ import (
 	"github.com/vmihailenco/msgpack"
 	"fmt"
 	"log"
+	"strconv"
 )
 
 const SERVERHOST = "192.168.1.176"
@@ -21,7 +22,9 @@ func PartWordsM1(job wor.Job) ([]byte, error) {
 	}
 
 	text := resp.StrParams[0]
-	partStr := parter.PartWords(text, npw.PART_MODE_ONE)
+	p2   := resp.StrParams[1]
+	tag, _  := strconv.ParseInt(p2, 10, 64)
+	partStr := parter.PartWords(text, npw.PART_MODE_ONE, int(tag))
 
 	retStruct := wor.GetRetStruct()
 	retStruct.Msg = "ok"
@@ -45,7 +48,9 @@ func PartWordsM2(job wor.Job) ([]byte, error) {
 	}
 
 	text := resp.StrParams[0]
-	partStr := parter.PartWords(text, npw.PART_MODE_TWO)
+	p2   := resp.StrParams[1]
+	tag, _  := strconv.ParseInt(p2, 10, 64)
+	partStr := parter.PartWords(text, npw.PART_MODE_TWO, int(tag))
 
 	retStruct := wor.GetRetStruct()
 	retStruct.Msg = "ok"
@@ -69,7 +74,9 @@ func PartWordsM3(job wor.Job) ([]byte, error) {
 	}
 
 	text := resp.StrParams[0]
-	partStr := parter.PartWords(text, npw.PART_MODE_THREE)
+	p2   := resp.StrParams[1]
+	tag, _  := strconv.ParseInt(p2, 10, 64)
+	partStr := parter.PartWords(text, npw.PART_MODE_THREE, int(tag))
 
 	retStruct := wor.GetRetStruct()
 	retStruct.Msg = "ok"

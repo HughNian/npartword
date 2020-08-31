@@ -63,7 +63,7 @@ func PartToStrings(part []*Part, tag int) (output string) {
 				if tag & 1 == 1 {
 					output += fmt.Sprintf("%s/%s| ", string(w.chars), w.pos)
 				} else if tag & 2 == 2 {
-					output += fmt.Sprintf("%s%f|", string(w.chars), w.distance)
+					output += fmt.Sprintf("%s/%f|", string(w.chars), w.distance)
 				} else {
 					output += fmt.Sprintf("%s|", string(w.chars))
 				}
