@@ -1,3 +1,8 @@
+<div align="center">
+    <a href="http://www.niansong.top"><img src="https://raw.githubusercontent.com/HughNian/npartword/master/logo/npartword_logo1.png" alt="npw logo" width="160"></a>
+</div>
+
+
 ## npw介绍
 npw：npartword，golang实现中文分词系统，主体分词逻辑有两个部分。   
 
