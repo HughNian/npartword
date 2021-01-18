@@ -1,5 +1,10 @@
 package npartword
 
+import (
+	"github.com/google/btree"
+)
+
+//分词词典
 type Dictionary struct {
 	trie        *Trie
 	maxCharLen  int
@@ -81,7 +86,7 @@ func (dict *Dictionary) FindWord(chars []rune) ([]*Word, int) {
 				num--
 				continue
 			} else {
-				word := NewWord([]byte(pre), 1, "x")
+				word := NewWord([]byte(pre), Rate(1), Pos("x"))
 				words = append(words, word)
 				break
 			}
@@ -93,4 +98,30 @@ func (dict *Dictionary) FindWord(chars []rune) ([]*Word, int) {
 	}
 
 	return words, num
+}
+
+//情感词典
+type EmoDictionary struct {
+	emowords  *btree.BTree
+	num  int
+}
+
+type EmoWord struct {
+	keyId  uint64
+	word   string
+	pos    string
+}
+
+func (records *EmoWord) Less(item btree.Item) bool {
+	return records.keyId < (item.(*EmoWord)).keyId
+}
+
+func NewEmoDictionary() *EmoDictionary {
+	emodict := &EmoDictionary {
+		num : 0,
+	}
+
+	emodict.emowords = btree.New(2)
+
+	return emodict
 }

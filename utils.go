@@ -1,6 +1,10 @@
 package npartword
 
-import "fmt"
+import (
+	"fmt"
+	"crypto/md5"
+	"encoding/binary"
+)
 
 //将英文词转化为小写
 func ToLower(text []byte) []byte {
@@ -34,7 +38,7 @@ func FilterPartNil(part []*Part) []*Part {
 	return newPart
 }
 
-//字符串显示分词
+//字符串显示分词 (老方法保留)
 //tag 0 不显示词其他信息
 //tag 1 显示词的词性
 //tag 2 显示词的词频，distance
@@ -84,6 +88,7 @@ func PartToStrings(part []*Part, tag int) (output string) {
 	return output
 }
 
+//字符数组显示分词 (老方法保留)
 func PartToTexts(part []*Part) (output []string) {
 	if len(part) <= 0 {
 		return nil
@@ -111,4 +116,28 @@ func PartToTexts(part []*Part) (output []string) {
 	}
 
 	return output
+}
+
+func GetKeysId(keywords ...string) (id uint64) {
+	if len(keywords) == 0 {
+		return 0
+	}
+
+	if len(keywords) == 1 {
+		r := []byte(keywords[0])
+		Md5Inst := md5.New()
+		Md5Inst.Write(r)
+		uret := Md5Inst.Sum([]byte(""))
+		id = binary.BigEndian.Uint64(uret)
+	} else if len(keywords) > 1 {
+		for _, keyword := range keywords {
+			r := []byte(keyword)
+			Md5Inst := md5.New()
+			Md5Inst.Write(r)
+			uret := Md5Inst.Sum([]byte(""))
+			id = binary.BigEndian.Uint64(uret)
+		}
+	}
+
+	return
 }

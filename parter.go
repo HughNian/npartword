@@ -23,7 +23,8 @@ const (
 
 //npartword分词器
 type Parter struct {
-	dict *Dictionary
+	dict     *Dictionary     //分词词典
+	emodict  *EmoDictionary  //情感词典
 }
 
 type jumper struct {
@@ -34,6 +35,7 @@ type jumper struct {
 func NewParter() *Parter {
 	return &Parter {
 		dict : NewDictionary(),
+		emodict : NewEmoDictionary(),
 	}
 }
 
@@ -42,15 +44,15 @@ func (pr *Parter) Dictionary() *Dictionary {
 }
 
 /**
- * 加载字典数据，dictfiles为字典文件路径，可以多个以,分隔
+ * 加载分词词典数据，dictfiles为字典文件路径，可以多个以,分隔
  *
  */
 func (pr *Parter) LoadDictionary(dictfiles string) {
 	for _, file := range strings.Split(dictfiles, ",") {
-		log.Println("载入字典文件-", file)
+		log.Println("载入词典文件-", file)
 		dictFile, err := os.Open(file)
 		if err != nil {
-			log.Fatalln("无法载入字典文件-", file)
+			log.Fatalln("无法载入词典文件-", file)
 		}
 
 		var (
@@ -85,7 +87,7 @@ func (pr *Parter) LoadDictionary(dictfiles string) {
 			}
 
 			//加载到字典树中
-			word  := NewWord([]byte(text), rate, pos)
+			word  := NewWord([]byte(text), Rate(rate), Pos(pos))
 			pr.dict.AddWord(word)
 		}
 	}
@@ -98,7 +100,54 @@ func (pr *Parter) LoadDictionary(dictfiles string) {
 		}
 	}
 
-	log.Println("加载字典文件完成")
+	log.Println("加载词典文件完成")
+}
+
+/**
+ * 加载情感词典数据，dictfiles为字典文件路径，可以多个以,分隔
+ *
+ */
+func (pr *Parter) LoadEmoDictionary(dictfiles string) {
+	for _, file := range strings.Split(dictfiles, ",") {
+		log.Println("载入情感词典文件-", file)
+		dictFile, err := os.Open(file)
+		if err != nil {
+			log.Fatalln("无法载入情感词典文件-", file)
+		}
+
+		var text, pos string
+		reader := bufio.NewReader(dictFile)
+		for {
+			size, _ := fmt.Fscanln(reader, &text, &pos)
+
+			if size == 0 {
+				//文件结束
+				break
+			} else if size < 2 {
+				//无效行
+				continue
+			} else if size == 1 {
+				//没有词性
+				pos = ``
+			}
+
+			//加载到情感词典btree中
+			keyId := GetKeysId(text)
+
+			//log
+			//logFile, _ := os.OpenFile("./log.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, os.ModePerm)
+			//loger := log.New(logFile, "npw", log.Ldate|log.Ltime|log.Lshortfile)
+			//loger.Println(text, "====", keyId)
+
+			pr.emodict.emowords.ReplaceOrInsert(&EmoWord {
+				keyId : keyId,
+				word  : text,
+				pos   : pos,
+			})
+		}
+	}
+
+	log.Println("加载情感词典文件完成")
 }
 
 //执行分词
@@ -183,7 +232,7 @@ func (pr *Parter) DoPartWords(text string, partModel int) []*Part {
 		hmm := NewHmm()
 		pstrs := hmm.HmmPart(text)
 		for i := 0; i < len(pstrs); i++ {
-			w := NewWord([]byte(pstrs[i]), 0, "hmm")
+			w := NewWord([]byte(pstrs[i]), Rate(0), Pos("hmm"))
 			part := NewPart(0, 0, []*Word{w})
 			outputPart = append(outputPart, part)
 		}
@@ -193,13 +242,24 @@ func (pr *Parter) DoPartWords(text string, partModel int) []*Part {
 }
 
 //分词
+func (pr *Parter) Part(text string, partModel int, tag int) *OutPut {
+	words := pr.DoPartWords(text, partModel)
+
+	return &OutPut {
+		parter : pr,
+		parts : words,
+		tag : tag,
+	}
+}
+
+//分词返回字符串，老方法暂时保留
 func (pr *Parter) PartWords(text string, partModel int, tag int) string {
 	words := pr.DoPartWords(text, partModel)
 
 	return PartToStrings(words, tag)
 }
 
-//分词返回字符串数组
+//分词返回字符串数组，老方法暂时保留
 func (pr *Parter) PartWordsTexts(text string, partModel int) []string {
 	words := pr.DoPartWords(text, partModel)
 

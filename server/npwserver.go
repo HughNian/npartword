@@ -21,12 +21,30 @@ func PartWordsM1(job wor.Job) ([]byte, error) {
 		return []byte(``), fmt.Errorf("response data error")
 	}
 
+	retStruct := wor.GetRetStruct()
+	if len(resp.StrParams) == 0 {
+		retStruct.Code = 100
+		retStruct.Msg = "error"
+		retStruct.Data = []byte(``)
+		ret, err := msgpack.Marshal(retStruct)
+		if nil != ret {
+			return []byte(``), err
+		}
+
+		resp.RetLen = uint32(len(ret))
+		resp.Ret = ret
+
+		return ret, err
+	}
+
 	text := resp.StrParams[0]
 	p2   := resp.StrParams[1]
 	tag, _  := strconv.ParseInt(p2, 10, 64)
-	partStr := parter.PartWords(text, npw.PART_MODE_ONE, int(tag))
+	//partStr := parter.PartWords(text, npw.PART_MODE_ONE, int(tag))
+	//partStr := parter.Part(text, npw.PART_MODE_ONE, int(tag)).ToStrings()
+	op := parter.Part(text, npw.PART_MODE_ONE, int(tag)).ToStrings()
+	partStr := npw.OpRet(op).GetEmoScore()
 
-	retStruct := wor.GetRetStruct()
 	retStruct.Msg = "ok"
 	retStruct.Data = []byte(partStr)
 	ret, err := msgpack.Marshal(retStruct)
@@ -47,12 +65,27 @@ func PartWordsM2(job wor.Job) ([]byte, error) {
 		return []byte(``), fmt.Errorf("response data error")
 	}
 
+	retStruct := wor.GetRetStruct()
+	if len(resp.StrParams) == 0 {
+		retStruct.Code = 100
+		retStruct.Msg = "error"
+		retStruct.Data = []byte(``)
+		ret, err := msgpack.Marshal(retStruct)
+		if nil != ret {
+			return []byte(``), err
+		}
+
+		resp.RetLen = uint32(len(ret))
+		resp.Ret = ret
+
+		return ret, err
+	}
+
 	text := resp.StrParams[0]
 	p2   := resp.StrParams[1]
 	tag, _  := strconv.ParseInt(p2, 10, 64)
 	partStr := parter.PartWords(text, npw.PART_MODE_TWO, int(tag))
 
-	retStruct := wor.GetRetStruct()
 	retStruct.Msg = "ok"
 	retStruct.Data = []byte(partStr)
 	ret, err := msgpack.Marshal(retStruct)
@@ -73,12 +106,27 @@ func PartWordsM3(job wor.Job) ([]byte, error) {
 		return []byte(``), fmt.Errorf("response data error")
 	}
 
+	retStruct := wor.GetRetStruct()
+	if len(resp.StrParams) == 0 {
+		retStruct.Code = 100
+		retStruct.Msg = "error"
+		retStruct.Data = []byte(``)
+		ret, err := msgpack.Marshal(retStruct)
+		if nil != ret {
+			return []byte(``), err
+		}
+
+		resp.RetLen = uint32(len(ret))
+		resp.Ret = ret
+
+		return ret, err
+	}
+
 	text := resp.StrParams[0]
 	p2   := resp.StrParams[1]
 	tag, _  := strconv.ParseInt(p2, 10, 64)
 	partStr := parter.PartWords(text, npw.PART_MODE_THREE, int(tag))
 
-	retStruct := wor.GetRetStruct()
 	retStruct.Msg = "ok"
 	retStruct.Data = []byte(partStr)
 	ret, err := msgpack.Marshal(retStruct)
@@ -108,6 +156,8 @@ func main() {
 	//加载字典
 	parter = npw.NewParter()
 	parter.LoadDictionary("./data/dictionary.txt")
+	parter.LoadEmoDictionary("./data/claim.txt,./data/degree.txt,./data/gainsay.txt,./data/negative_comment.txt," +
+							 "./data/negative_emotions.txt,./data/positive_comment.txt,./data/positive_emotions.txt")
 
 	worker.AddFunction("PartWordsM1", PartWordsM1)
 	worker.AddFunction("PartWordsM2", PartWordsM2)
