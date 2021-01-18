@@ -27,7 +27,7 @@ $client = new ClientExt($host, $port);
 $client->connect();
 
 //普通分词
-fname - PartWordsM1
+//fname - PartWordsM1
 $text = "南京大学城书店，长春市长春药店，研究生命起源";
 $params = msgpack_pack(array($text, "1"));
 $client->dowork("PartWordsM1", $params, function($ret){
@@ -44,7 +44,7 @@ array(3) {
 }
 
 //mmseg分词
-fname - PartWordsM2
+//fname - PartWordsM2
 $params = msgpack_pack(array($text, "1"));
 $client->dowork("PartWordsM2", $params, function($ret){
         var_dump($ret);
@@ -60,7 +60,7 @@ array(3) {
 }
 
 //隐马尔可夫模型
-fname - PartWordsM3
+//fname - PartWordsM3
 $params = msgpack_pack(array($text, "1"));
 $client->dowork("PartWordsM3", $params, function($ret) {
         var_dump($ret);
