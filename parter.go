@@ -23,7 +23,7 @@ const (
 
 //npartword分词器
 type Parter struct {
-	dict     *Dictionary     //分词词典
+	dict     *Dictionary     //分词字典
 	emodict  *EmoDictionary  //情感词典
 }
 
@@ -49,10 +49,10 @@ func (pr *Parter) Dictionary() *Dictionary {
  */
 func (pr *Parter) LoadDictionary(dictfiles string) {
 	for _, file := range strings.Split(dictfiles, ",") {
-		log.Println("载入词典文件-", file)
+		log.Println("载入字典文件-", file)
 		dictFile, err := os.Open(file)
 		if err != nil {
-			log.Fatalln("无法载入词典文件-", file)
+			log.Fatalln("无法载入字典文件-", file)
 		}
 
 		var (
@@ -100,7 +100,7 @@ func (pr *Parter) LoadDictionary(dictfiles string) {
 		}
 	}
 
-	log.Println("加载词典文件完成")
+	log.Println("加载字典文件完成")
 }
 
 /**

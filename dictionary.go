@@ -4,7 +4,7 @@ import (
 	"github.com/google/btree"
 )
 
-//分词词典
+//分词字典
 type Dictionary struct {
 	trie        *Trie
 	maxCharLen  int
