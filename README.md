@@ -18,7 +18,7 @@ npw：npartword，golang实现中文分词系统，主体分词逻辑有两个�
 
 - 2.分词系统服务调用，只要通过nmid的client调用即可，任何nmid的client都可以随时跨服务器的使用分词系统。    
 
-```php
+```go
 php调用示例
 
 $host = "xxx.xxx.x.xx";

@@ -1,14 +1,15 @@
 package main
 
 import (
-	"github.com/vmihailenco/msgpack"
-	cli "github.com/HughNian/nmid/client"
-	"log"
 	"fmt"
+	cli "github.com/HughNian/nmid/pkg/client"
+	"github.com/HughNian/nmid/pkg/model"
+	"github.com/vmihailenco/msgpack"
+	"log"
 	"os"
 )
 
-const SERVERHOST = "192.168.1.176"
+const SERVERHOST = "127.0.0.1"
 const SERVERPORT = "6808"
 
 func main() {
@@ -23,8 +24,8 @@ func main() {
 	}
 	defer client.Close()
 
-	client.ErrHandler= func(e error) {
-		if cli.RESTIMEOUT == e {
+	client.ErrHandler = func(e error) {
+		if model.RESTIMEOUT == e {
 			log.Println("time out here")
 		} else {
 			log.Println(e)
@@ -34,13 +35,13 @@ func main() {
 	}
 
 	respHandler := func(resp *cli.Response) {
-		if resp.DataType == cli.PDT_S_RETURN_DATA && resp.RetLen != 0 {
+		if resp.DataType == model.PDT_S_RETURN_DATA && resp.RetLen != 0 {
 			if resp.RetLen == 0 {
 				log.Println("ret empty")
 				return
 			}
 
-			var retStruct cli.RetStruct
+			var retStruct model.RetStruct
 			err := msgpack.Unmarshal(resp.Ret, &retStruct)
 			if nil != err {
 				log.Fatalln(err)
@@ -56,8 +57,10 @@ func main() {
 		}
 	}
 
-	text := []string{"南京大学城书店，长春市长春药店，研究生命起源", "2"}
-	params, err := msgpack.Marshal(&text)
+	paramsName1 := make(map[string]interface{})
+	paramsName1["text"] = "南京大学城书店，长春市长春药店，研究生命起源"
+	paramsName1["p2"] = "2"
+	params, err := msgpack.Marshal(&paramsName1)
 	if err != nil {
 		log.Fatalln("params msgpack error:", err)
 		os.Exit(1)
