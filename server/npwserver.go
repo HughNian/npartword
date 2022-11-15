@@ -142,6 +142,8 @@ func PartWordsM3(job wor.Job) ([]byte, error) {
 }
 
 func main() {
+	showLogo()
+
 	//worker服务
 	var worker *wor.Worker
 	var err error
@@ -171,4 +173,15 @@ func main() {
 	}
 
 	worker.WorkerDo()
+}
+
+func showLogo() {
+	logo := `
+  ____  ____ _      __
+  / __ \/ __ \ | /| / /
+ / / / / /_/ / |/ |/ / 
+/_/ /_/ .___/|__/|__/  
+     /_/               
+`
+	fmt.Println(logo)
 }
