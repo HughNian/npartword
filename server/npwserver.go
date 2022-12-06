@@ -12,6 +12,7 @@ import (
 
 const SERVERHOST = "127.0.0.1"
 const SERVERPORT = "6808"
+const SkyWalkingTraceOapUrl = "192.168.64.6:30484"
 
 var parter *npw.Parter
 
@@ -145,10 +146,11 @@ func main() {
 	showLogo()
 
 	//worker服务
+	var workerName = "npartword"
 	var worker *wor.Worker
 	var err error
 	serverAddr := SERVERHOST + ":" + SERVERPORT
-	worker = wor.NewWorker()
+	worker = wor.NewWorker().SetWorkerName(workerName).WithTrace(SkyWalkingTraceOapUrl)
 	err = worker.AddServer("tcp", serverAddr)
 	if err != nil {
 		log.Fatalln(err)
