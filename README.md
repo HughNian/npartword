@@ -19,7 +19,7 @@ npw：npartword，golang实现中文分词系统，主体分词逻辑有两个�
 - 2.分词系统服务调用，只要通过nmid的client调用即可，任何nmid的client都可以随时跨服务器的使用分词系统。    
 
 ## k8s使用
-在k8s目录中有k8s部署文件，在k8s集群中执行`sudo kubectl apply -f deployment.yaml`，使用nmid镜像#56，nsearch镜像#5，支持链路追踪。   
+在k8s目录中有k8s部署文件，在k8s集群中执行`sudo kubectl apply -f deployment.yaml`，使用nmid镜像#56，npartword#3，支持链路追踪。   
 在k8s部署skywalking，在k8s集群中执行 `sudo kubectl apply -f skywalking-oap.yaml`，`sudo kubectl apply -f skywalking-ui.yaml`
 <div align="center">
     <img src="https://raw.githubusercontent.com/HughNian/npartword/master/trace.png" alt="trace">
