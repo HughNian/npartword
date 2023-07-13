@@ -2,3 +2,6 @@
 /.vscode
 /client/client
 /server/npwserver
+/server/log_dir
+/server/Make.bat
+/server/npwserver.exe

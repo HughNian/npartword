@@ -1,8 +1,8 @@
 package npartword
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func Test_Dict(t *testing.T) {
@@ -13,7 +13,7 @@ func Test_Dict(t *testing.T) {
 	//text := "长春市长春药店"
 	//text := "研究生命起源"
 
-	str := parter.PartWords(text, PART_MODE_TWO)
+	str := parter.PartWords(text, PART_MODE_TWO, 0)
 	fmt.Println(str)
 
 	texts := parter.PartWordsTexts(text, PART_MODE_TWO)

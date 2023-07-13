@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
+
 	cli "github.com/HughNian/nmid/pkg/client"
 	"github.com/HughNian/nmid/pkg/model"
 	"github.com/vmihailenco/msgpack"
-	"log"
-	"os"
 )
 
 const SERVERHOST = "127.0.0.1"
@@ -17,7 +18,7 @@ func main() {
 	var err error
 
 	serverAddr := SERVERHOST + ":" + SERVERPORT
-	client, err = cli.NewClient("tcp", serverAddr)
+	client, err = cli.NewClient("tcp", serverAddr).Start()
 	if nil == client || err != nil {
 		log.Println(err)
 		return

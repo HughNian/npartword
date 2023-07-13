@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"strconv"
+
 	"github.com/HughNian/nmid/pkg/model"
 	wor "github.com/HughNian/nmid/pkg/worker"
 	npw "github.com/HughNian/npartword"
 	"github.com/vmihailenco/msgpack"
-	"log"
-	"strconv"
 )
 
 const SERVERHOST = "127.0.0.1"
@@ -150,7 +151,8 @@ func main() {
 	var worker *wor.Worker
 	var err error
 	serverAddr := SERVERHOST + ":" + SERVERPORT
-	worker = wor.NewWorker().SetWorkerName(workerName).WithTrace(SkyWalkingTraceOapUrl)
+	// worker = wor.NewWorker().SetWorkerName(workerName).WithTrace(SkyWalkingTraceOapUrl)
+	worker = wor.NewWorker().SetWorkerName(workerName)
 	err = worker.AddServer("tcp", serverAddr)
 	if err != nil {
 		log.Fatalln(err)
