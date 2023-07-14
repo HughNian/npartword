@@ -3,8 +3,12 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
+	"os/signal"
 	"strconv"
+	"syscall"
 
+	"github.com/HughNian/nmid/pkg/logger"
 	"github.com/HughNian/nmid/pkg/model"
 	wor "github.com/HughNian/nmid/pkg/worker"
 	npw "github.com/HughNian/npartword"
@@ -176,7 +180,14 @@ func main() {
 		return
 	}
 
-	worker.WorkerDo()
+	go worker.WorkerDo()
+
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, os.Kill)
+	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	s := <-c
+	logger.Infof("Server Exit: %s", s.String())
+	worker.WorkerClose()
 }
 
 func showLogo() {
