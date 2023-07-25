@@ -5,3 +5,4 @@
 /server/log_dir
 /server/Make.bat
 /server/npwserver.exe
+/*.env

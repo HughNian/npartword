@@ -1,41 +1,41 @@
 package npartword
 
 import (
-	"strings"
-	"log"
-	"os"
-	"fmt"
-	"strconv"
-	"unicode/utf8"
-	"unicode"
 	"bufio"
+	"fmt"
+	"log"
 	"math"
+	"os"
+	"strconv"
+	"strings"
+	"unicode"
+	"unicode/utf8"
 )
 
 const MIN_WORD_FREQUENCY = 2
 const SPACE = 32
 
 const (
-	PART_MODE_ONE   = 1  //普通分词
-	PART_MODE_TWO   = 2  //mmseg分词
-	PART_MODE_THREE = 3  //隐马尔可夫模型分词
+	PART_MODE_ONE   = 1 //普通分词
+	PART_MODE_TWO   = 2 //mmseg分词
+	PART_MODE_THREE = 3 //隐马尔可夫模型分词
 )
 
-//npartword分词器
+// npartword分词器
 type Parter struct {
-	dict     *Dictionary     //分词字典
-	emodict  *EmoDictionary  //情感词典
+	dict    *Dictionary    //分词字典
+	emodict *EmoDictionary //情感词典
 }
 
 type jumper struct {
-	word	 *Word
-	miniDis  float32
+	word    *Word
+	miniDis float32
 }
 
 func NewParter() *Parter {
-	return &Parter {
-		dict : NewDictionary(),
-		emodict : NewEmoDictionary(),
+	return &Parter{
+		dict:    NewDictionary(),
+		emodict: NewEmoDictionary(),
 	}
 }
 
@@ -57,7 +57,7 @@ func (pr *Parter) LoadDictionary(dictfiles string) {
 
 		var (
 			text, ratetext, pos string
-			rate int
+			rate                int
 		)
 		//读取文件，直到读完
 		reader := bufio.NewReader(dictFile)
@@ -87,7 +87,7 @@ func (pr *Parter) LoadDictionary(dictfiles string) {
 			}
 
 			//加载到字典树中
-			word  := NewWord([]byte(text), Rate(rate), Pos(pos))
+			word := NewWord([]byte(text), Rate(rate), Pos(pos))
 			pr.dict.AddWord(word)
 		}
 	}
@@ -139,10 +139,10 @@ func (pr *Parter) LoadEmoDictionary(dictfiles string) {
 			//loger := log.New(logFile, "npw", log.Ldate|log.Ltime|log.Lshortfile)
 			//loger.Println(text, "====", keyId)
 
-			pr.emodict.emowords.ReplaceOrInsert(&EmoWord {
-				keyId : keyId,
-				word  : text,
-				pos   : pos,
+			pr.emodict.emowords.ReplaceOrInsert(&EmoWord{
+				keyId: keyId,
+				word:  text,
+				pos:   pos,
 			})
 		}
 	}
@@ -150,7 +150,7 @@ func (pr *Parter) LoadEmoDictionary(dictfiles string) {
 	log.Println("加载情感词典文件完成")
 }
 
-//执行分词
+// 执行分词
 func (pr *Parter) DoPartWords(text string, partModel int) []*Part {
 	chars := []rune(text)
 
@@ -208,9 +208,9 @@ func (pr *Parter) DoPartWords(text string, partModel int) []*Part {
 	//mmseg方式分词，准确率更高的分词
 	if partModel == PART_MODE_TWO {
 		var (
-			mmseg        *MMseg
-			pos          = 0
-			charsLength  = len(chars)
+			mmseg       *MMseg
+			pos         = 0
+			charsLength = len(chars)
 		)
 		for pos < charsLength {
 			words := ``
@@ -241,25 +241,25 @@ func (pr *Parter) DoPartWords(text string, partModel int) []*Part {
 	return outputPart
 }
 
-//分词
+// 分词
 func (pr *Parter) Part(text string, partModel int, tag int) *OutPut {
 	words := pr.DoPartWords(text, partModel)
 
-	return &OutPut {
-		parter : pr,
-		parts : words,
-		tag : tag,
+	return &OutPut{
+		parter: pr,
+		parts:  words,
+		tag:    tag,
 	}
 }
 
-//分词返回字符串，老方法暂时保留
+// 分词返回字符串，老方法暂时保留
 func (pr *Parter) PartWords(text string, partModel int, tag int) string {
 	words := pr.DoPartWords(text, partModel)
 
 	return PartToStrings(words, tag)
 }
 
-//分词返回字符串数组，老方法暂时保留
+// 分词返回字符串数组，老方法暂时保留
 func (pr *Parter) PartWordsTexts(text string, partModel int) []string {
 	words := pr.DoPartWords(text, partModel)
 
@@ -267,6 +267,7 @@ func (pr *Parter) PartWordsTexts(text string, partModel int) []string {
 }
 
 type Text []byte
+
 func splitToChars(text []byte) []Text {
 	current := 0
 	output := make([]Text, 0, len(text)/3)

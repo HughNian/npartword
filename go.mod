@@ -3,7 +3,7 @@ module github.com/HughNian/npartword
 go 1.19
 
 require (
-	github.com/HughNian/nmid v1.0.10
+	github.com/HughNian/nmid v1.0.12
 	github.com/google/btree v1.1.2
 	github.com/vmihailenco/msgpack v4.0.4+incompatible
 )
