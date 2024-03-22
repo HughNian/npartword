@@ -15,10 +15,6 @@ import (
 	"github.com/vmihailenco/msgpack"
 )
 
-const SERVERHOST = "127.0.0.1"
-const SERVERPORT = "6808"
-const SkyWalkingTraceOapUrl = "192.168.64.6:30484"
-
 var parter *npw.Parter
 
 // 普通分词
@@ -154,8 +150,8 @@ func main() {
 	var workerName = "npartword"
 	var worker *wor.Worker
 	var err error
-	serverAddr := SERVERHOST + ":" + SERVERPORT
-	// worker = wor.NewWorker().SetWorkerName(workerName).WithTrace(SkyWalkingTraceOapUrl)
+	serverAddr := os.Getenv("NMIDSERVERHOST") + ":" + os.Getenv("NMIDSERVERPORT")
+	// worker = wor.NewWorker().SetWorkerName(workerName).WithTrace(os.Getenv("SKYWALKINGTRACEOAPURL"))
 	worker = wor.NewWorker().SetWorkerName(workerName)
 	err = worker.AddServer("tcp", serverAddr)
 	if err != nil {
